@@ -16,7 +16,7 @@ Graphe nouveau_graphe(unsigned int nX,unsigned int nA)
 void affiche_graphe(Graphe g)
 {
 	int i; 
-	sommet* tableau=g->sommet;
+	sommet* tableau=g->stations;
 	for (i=0; i<g->nX; i++)
 	{
   	visualiser_liste(tableau[i]);
@@ -28,7 +28,7 @@ void affiche_graphe(Graphe g)
 void detruit_graphe(Graphe g)
 {
 	int i; 
-	sommet* tableau=g->sommet;
+	sommet* tableau=g->stations;
 	for (i=0; i<g->nX; i++)
 	{
   	free(tableau[i]);
