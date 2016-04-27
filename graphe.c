@@ -5,9 +5,23 @@
 
 /// Fonctions de laure
 /*Graphe nouveau_graphe(unsigned int nX,unsigned int nA)
-
+{
+	Graphe* g=calloc(1,sizeof(*g));
+	g->nX=nX;
+	g->nA=nA;
+	sommet* tableau=calloc(nX,sizeof(*tableau));
+	return g;
+}
 
 void affiche_graphe(Graphe g)
+{
+	int i; sommet* tableau=graphe->sommet
+	for (i=0; i<graphe->nX; i++)
+	{
+  	visualiser_liste(tableau[i]);
+	}
+}
+
 
 
 void detruit_graphe(Graphe g)
