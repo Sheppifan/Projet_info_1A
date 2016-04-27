@@ -1,19 +1,7 @@
 #include "liste.h"
-#include "carte.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-/*int compare(CARTE c1, CARTE c2)
-{	if (c1.rang>c2.rang) return -1;
-	if (c1.rang==c2.rang) return 0;
-	else return 1;
-}*/
-
-/*void affiche (CARTE* e) {
-  static char* mesc[]={"trefle","carreau","coeur","pique"};
-  static char* mesval[] ={"as","2","3","4","5","6","7","8","9","dix","valet","dame","roi"};
-  printf("%s de %s ;",mesval[e->rang-1],mesc[e->couleur]);
-}*/
 
 /*void affichevisible(CARTE* e) {
   static char* mesc[]={"trefle","carreau","coeur","pique"};
@@ -21,7 +9,10 @@
   if (e->visible) printf("%s de %s ;",mesval[e->rang-1],mesc[e->couleur]);
 }
 */
-
+void affiche(ELEMENT e) {
+    printf("destination : %d    ", e.Xdest);
+    printf("poids : %lf \n", e.poids_arc);
+}
 
 Liste creer_liste(void)
 {	return NULL;
@@ -33,20 +24,18 @@ int est_vide(Liste l)
 
 void visualiser_liste(Liste l)
 {	Liste p=l;
-	if (est_vide(p)) printf("liste vide");
+	if (est_vide(p)) printf("liste vide\n");
 	while (!est_vide(p))
-	{	affiche(&p->val);
-		//printf("%s\n",*p->visible);
+	{	affiche(p->val);
 		p=p->suiv;
 	}
 }
 
-Liste ajout_tete(CARTE c,Liste l)
+Liste ajout_tete(ELEMENT e,Liste l)
 {	Liste p=calloc(1,sizeof(*p));
 	if (p==NULL) return NULL;
-	p->val.rang=c.rang;
-	p->val.couleur=c.couleur;
-	p->val.visible=c.visible;
+	p->val.Xdest=e.Xdest;
+	p->val.poids_arc=e.poids_arc;
 	p->suiv=l;
 	return p;
 }
@@ -58,19 +47,18 @@ Liste supprimer_tete(Liste l)
 		free(l);
 		return p;
 	}
-	else {printf("liste vide"); return NULL;}
+	else {printf("liste vide\n"); return NULL;}
 }
 
-Liste ajout_queue(CARTE c,Liste l)
+Liste ajout_queue(ELEMENT e,Liste l)
 {	Liste p1=l,p2;
-	if (est_vide(l)) return ajout_tete(c,l);
+	if (est_vide(l)) return ajout_tete(e,l);
 	while (!est_vide(p1->suiv))
 	{	p1=p1->suiv;
 	}
 	p2=calloc(1,sizeof(*p2));
-	p2->val.rang=c.rang;
-	p2->val.couleur=c.couleur;
-	p2->val.visible=c.visible;
+	p2->val.Xdest=e.Xdest;
+	p2->val.poids_arc=e.poids_arc;
 	p2->suiv=NULL;
 	p1->suiv=p2;
 	return l;
@@ -80,9 +68,9 @@ Liste supprimen(int n,Liste l)
 {	int i;
 	Liste p1=l,p2;
 	if (est_vide(l)) {printf("liste vide\n"); return l;}
-	if (n<1) {printf("n négatif\n"); return l;} 
+	if (n<1) {printf("n négatif\n"); return l;}
 	if (n==1) return supprimer_tete(l);
-	else 
+	else
 	{	for(i=1;i<n-1;i++)
 		{	if(est_vide(p1->suiv)) { printf("n trop grand\n"); return l;}
 			p1=p1->suiv;
@@ -96,6 +84,30 @@ Liste supprimen(int n,Liste l)
 	}
 }
 
+/*int main()
+{
+    Liste L=creer_liste();
+    int Xdest=0;
+    double poids=0;
+    ELEMENT e;
+    int i=0;
+    printf("%d\n",est_vide(L));
+    for(i=0;i<5;i++)
+    {
+        printf("entrer element :");
+        scanf("%d    %lf",&Xdest,&poids);
+        printf("%d\n",Xdest);
+        printf("%lf\n",poids);
+        e.Xdest=Xdest;
+        e.poids_arc=poids;
+        L=ajout_tete(e,L);
+        visualiser_liste(L);
+    }
+    L=supprimen(2,L);
+    visualiser_liste(L);
+    L=supprimer_tete(L);
+    return 1;
+}*/
 
 /*Liste concat(Liste l1,Liste l2)
 {	Liste p1=l1,p2=l2;
@@ -104,7 +116,7 @@ Liste supprimen(int n,Liste l)
 	return l1;
 }
 
-Liste copie(Liste l)
+Liste copie(Liste l)//a modif
 {	Liste l2,p1=l;
 	l2=creer_Liste()
 	while (!est_vide(p1->suiv))

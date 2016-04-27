@@ -30,7 +30,7 @@ unsigned int graphe_lit_nA(Graphe g)*/
 
 double graphe_lit_poids(Graphe g, unsigned int u)       //lit le poids du noeud u du graphe g
 {
-    Graphe p=g;
+    sommet p=(g->stations);
     double poids_noeud;
    //int i=0;
     if(g==NULL) { printf("graphe vide\n"); return 0;}
@@ -39,7 +39,7 @@ double graphe_lit_poids(Graphe g, unsigned int u)       //lit le poids du noeud 
         else p=p+1;
     }*/
     p=p+u;
-    poids_noeud=p->poids_noeud;
+    poids_noeud=*(p->poids_noeud);
     return poids_noeud;
 }
 
@@ -47,18 +47,18 @@ void graphe_ecrit_poids(Graphe g, unsigned int u, double valeur) //ecrit dans le
 {
     //Graphe p=g;
     if(g==NULL) printf("graphe vide\n");
-    (g+u)->poids_noeud=valeur;
+    *(((g-<stations)+u)->poids_noeud)=valeur;
 
 }
 
 void graphe_ecrit_poids_arc(Graphe g, unsigned int u, unsigned int v, double valeur)///ameliorer les tests
 {
     int i=0;
-    Graphe p=g;
+    Graphe p=g->stations;
     Liste l=creer_liste();
     if(g==NULL) printf("graphe vide\n");
-    p=g+u;
-    l=p->arc;
+    p=p+u;
+    l=*(p->arc);
     for(i=0;i<=v;i++)
     {
         l=l->suiv;
@@ -70,11 +70,11 @@ double graphe_lit_poids_arc(Graphe g, unsigned int u, unsigned int v)
 {
     double valeur;
     int i=0;
-    Graphe p=g;
+    Graphe p=g->stations;
     Liste l=creer_liste();
     if(g==NULL) printf("graphe vide\n");
-    p=g+u;
-    l=p->arc;
+    p=p+u;
+    l=*(p->arc);
     for(i=0;i<=v;i++)
     {
         l=l->suiv;
@@ -86,6 +86,32 @@ double graphe_lit_poids_arc(Graphe g, unsigned int u, unsigned int v)
 ///fonctions Haut niveau
 
 /*Graphe lit_graphe(char* fichier)
+{	FILE* fstation=NULL;
+	Graphe g;
+	int nX;
+	int nA;
+	int nbstation;
+	double latitude,longitude;
+	char nmstation,nomligne;
+	int nbr_noeud;
+	int nbr_arc;
+	int station_depart;
+	int station_arrivee;
+	double poids_arc;
+	
+	if ((fstation=fopen("graphe1.csv","r+"))==NULL)  //exit avec erreur
+	else
+	{	fscanf(fstation,"%d %d",nX,nA);
+		
+while (fscanf(fstation,"%s %s %d %lf",element.nom,element.symbole,&element.numeroatomique,&element.masseatomique)==4)
+		{
+		position=(element.numeroatomique-1)*sizeof(FICHE);
+		fseek(fbin,position,0);
+		fwrite(&element,sizeof(FICHE),1,fbin);
+		}
+	fclose(fstation);
+}
+}
 
 void graphe_ajoute_arc(Graphe g, unsigned int u, unsigned int v, double val)
 
