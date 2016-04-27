@@ -20,7 +20,8 @@
 
 typedef struct {
 	unsigned char nom_station[50];
-	unsigned int nbligne;
+	unsigned char nom_ligne;
+	unsigned int num_station;
 	double poids_noeud;
 	Liste arc;
 	}* sommet;
