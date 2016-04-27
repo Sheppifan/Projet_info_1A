@@ -4,7 +4,7 @@
 
 
 /// Fonctions de laure
-/*Graphe nouveau_graphe(unsigned int nX,unsigned int nA)
+Graphe nouveau_graphe(unsigned int nX,unsigned int nA)
 {
 	Graphe* g=calloc(1,sizeof(*g));
 	g->nX=nX;
@@ -39,15 +39,27 @@ free(g);
 
 
 void graphe_ecrit_nX(Graphe g, unsigned int nX)
+{
+	g->nX=nX;
+}
 
 
 void graphe_ecrit_nA(Graphe g, unsigned int nA)
+{
+	q->nA=nA;
+}
 
 
 unsigned int graphe_lit_nX(Graphe g)
+{
+	printf("%u\n",g->nX);
+}
 
 
-unsigned int graphe_lit_nA(Graphe g)*/
+unsigned int graphe_lit_nA(Graphe g)
+{
+	printf("%u\n",g->nA);
+}
 
 ///Fonctions de Caroline
 
