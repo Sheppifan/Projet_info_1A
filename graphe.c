@@ -15,7 +15,8 @@
 
 void affiche_graphe(Graphe g)
 {
-	int i; sommet* tableau=graphe->sommet
+	int i; 
+	sommet* tableau=graphe->sommet;
 	for (i=0; i<graphe->nX; i++)
 	{
   	visualiser_liste(tableau[i]);
