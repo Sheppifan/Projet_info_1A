@@ -26,7 +26,7 @@ typedef struct {
 	}* sommet;
 
 typedef struct {
-	sommet station;
+	sommet stations;
 	unsigned int nX;
 	unsigned int nA;
 	} Graphe;
