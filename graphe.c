@@ -161,6 +161,19 @@ double graphe_lit_poids_arc(Graphe g, unsigned int u, unsigned int v)
 }
 
 void graphe_ajoute_arc(Graphe g, unsigned int u, unsigned int v, double val)
+{	sommet p=g->stations;
+	ELEMENT e;
+	unsigned int nbrX;
+	
+	e.Xdest=v;
+	e.poids_arc=val;
+	
+	nbrX=g->nX;
+	if(nbrX<u) {puts("Erreur station depart non presente\n"); exit(1);}
+	p=p+u;
+	*(p->arc)=ajout_queue(e,*(p->arc));
+	
+}
 
 double graphe_pcc(Graphe g, unsigned int u, unsigned int v)
 */
