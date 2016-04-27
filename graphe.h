@@ -3,8 +3,6 @@
 #include "element.h"
 #include <stdlib.h>
 
-#ifndef _Graphe
-#define _Graphe
 
 /*typedef struct {
     unsigned char nom_station[50];
@@ -16,7 +14,8 @@
     }* Graphe;*/
 // deuxième solution
 
-
+#ifndef _sommet
+#define _sommet
 
 typedef struct {
 	unsigned char nom_station[50];
@@ -25,7 +24,10 @@ typedef struct {
 	double poids_noeud;
 	Liste arc;
 	}* sommet;
+#endif
 
+#ifndef _Graphe
+#define _Graphe
 typedef struct {
 	sommet stations;
 	unsigned int nX;
