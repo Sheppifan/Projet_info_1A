@@ -52,13 +52,13 @@ void graphe_ecrit_nA(Graphe g, unsigned int nA)
 
 unsigned int graphe_lit_nX(Graphe g)
 {
-	printf("%u\n",g->nX);
+	g->nX;
 }
 
 
 unsigned int graphe_lit_nA(Graphe g)
 {
-	printf("%u\n",g->nA);
+	g->nA;
 }
 
 ///Fonctions de Caroline
