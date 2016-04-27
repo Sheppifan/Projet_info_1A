@@ -125,29 +125,39 @@ double graphe_lit_poids_arc(Graphe g, unsigned int u, unsigned int v)
 /*Graphe lit_graphe(char* fichier)
 {	FILE* fstation=NULL;
 	Graphe g;
+	sommet p;
 	int nX;
 	int nA;
 	int nbstation;
 	double latitude,longitude;
-	char nmstation,nomligne;
-	int nbr_noeud;
-	int nbr_arc;
+	char* nmstation[50],nomligne[50];  //revoir appelation pour la fonction fscanf et fseek
+	int nbr_noeud=0;
+	int nbr_arc=0;
 	int station_depart;
 	int station_arrivee;
 	double poids_arc;
 	
-	if ((fstation=fopen("graphe1.csv","r+"))==NULL)  //exit avec erreur
+	if ((fstation=fopen(fichier,"r+"))==NULL)  {puts("Erreur ouverture fichier"); exit(1);}   //revoir la sortie de fionction
 	else
 	{	fscanf(fstation,"%d %d",nX,nA);
-		
-while (fscanf(fstation,"%s %s %d %lf",element.nom,element.symbole,&element.numeroatomique,&element.masseatomique)==4)
-		{
-		position=(element.numeroatomique-1)*sizeof(FICHE);
-		fseek(fbin,position,0);
-		fwrite(&element,sizeof(FICHE),1,fbin);
+		g=nouveau_graphe(nX,nA);
+		p=g->stations;
+		if(fseek(fstation,18,SEEK_CUR)!=0) {printf("erreur"); exit(1);}  //revoir fseek
+		while(fscanf(fstation,"%d %lf %lf %s %s",nbstation,latitude,longitude,nmstation,nomligne)==5)
+		{	*(p->nom_station)=nmstation;
+			*(p->nom_ligne)=nomligne;
+			*(p->num_station)=nbstation;
+			nbr_noeud++;
 		}
-	fclose(fstation);
-}
+		if(nbr_noeud!=nX) {printf("erreur lecture stations\n"); exit(1);}
+		if(fseek(fstation,38,SEEK_CUR)!=0) {printf("erreur"); exit(1);}  //revoir fseek 
+		while(fscanf("%d %d %lf",station_depart,station_arrivee,poids)==3)
+		{	graphe_ajoute_arc(g,station_depart,station_arrivee,poids);
+			nbr_arc++;
+		}
+		if(nbr_arc!=nA) {printf("erreur lecture arc\n"); exit(1);}
+	}
+	return g;
 }
 
 void graphe_ajoute_arc(Graphe g, unsigned int u, unsigned int v, double val)
