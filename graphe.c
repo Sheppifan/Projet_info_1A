@@ -1,45 +1,45 @@
 #include "graphe.h"
 #include "liste.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 
 /// Fonctions de laure
 Graphe nouveau_graphe(unsigned int nX,unsigned int nA)
 {
-	Graphe* g=calloc(1,sizeof(*g));
+	Graphe g=calloc(1,sizeof(g));
+	sommet tableau=calloc(nX,sizeof(tableau));
+
 	g->nX=nX;
 	g->nA=nA;
-	sommet* tableau=calloc(nX,sizeof(*tableau));
 	return g;
 }
 
 void affiche_graphe(Graphe g)
-{	if(g!=NULL)
-{
-	int i; 
-	sommet* tableau=g->stations;
+{	unsigned int i; 
+	sommet tableau=g->stations;
 	for (i=0; i<g->nX; i++)
-	{printf("Nom de station : %c\n", tableau[i].nom_station);
-	printf("Nom de ligne : %c\n", tableau[i].nom_ligne);
+	{printf("Nom de station : %s\n", tableau[i].nom_station);
+	printf("Nom de ligne : %u\n", tableau[i].nom_ligne);
 	printf("Numero de station : %u\n", tableau[i].num_station);
-	printf("Poids noeud : %d\n", tableau[i].poids_noeud);
-  	visualiser_liste(tableau[i]);
+	printf("Poids noeud : %lf\n", tableau[i].poids_noeud);
+  	visualiser_liste(tableau[i].arc);
 	}
-}
-else return NULL;
+
 }
 
 
 
 void detruit_graphe(Graphe g)
 {
-	int i; 
-	sommet* tableau=g->stations;
+	unsigned int i; 
+	sommet tableau=g->stations;
 	for (i=0; i<g->nX; i++)
 	{
-  	free(tableau[i]);
+  	free(tableau[i].arc);
 	}
-free(g);
+	free(g->stations);
+	free(g);
 	
 }
 
@@ -52,7 +52,7 @@ void graphe_ecrit_nX(Graphe g, unsigned int nX)
 
 void graphe_ecrit_nA(Graphe g, unsigned int nA)
 {
-	q->nA=nA;
+	g->nA=nA;
 }
 
 
@@ -76,34 +76,34 @@ double graphe_lit_poids(Graphe g, unsigned int u)       //lit le poids du noeud 
     sommet p=(g->stations);
     double poids_noeud;
     if(g==NULL) { printf("graphe vide\n"); return 0;}	//Il faut retourner une erreur type VALUE ERROR
-	if(u<1 || u>g->nX) return VALUE_ERROR;
+	if(u<1 || u>g->nX) exit(1);
 
     p=p+u;
-    poids_noeud=*p->poids_noeud;
+    poids_noeud=p->poids_noeud;
     return poids_noeud;
 }
 
 void graphe_ecrit_poids(Graphe g, unsigned int u, double valeur) //ecrit dans le champ poids_noeud le poids du noeud u du graphe g
 {
-    if(g==NULL) {printf("graphe vide\n"); return VALUE_ERROR;}
-	if(u<1 || u>g->nX) return VALUE_ERROR;
+    if(g==NULL) {printf("graphe vide\n"); exit(1);}
+	if(u<1 || u>g->nX) exit(1);
 
-    (*((g->stations)+u))->poids_noeud=valeur;
+    (*((g->stations)+u)).poids_noeud=valeur;
 }
 
 void graphe_ecrit_poids_arc(Graphe g, unsigned int u, unsigned int v, double valeur)///ameliorer les tests
 {
-    int i=0;
+    unsigned int i=0;
     sommet p=NULL;
     Liste l=creer_liste();
-    if(g==NULL) {printf("graphe vide\n"); return VALUE_ERROR;}
-    if(u<1 || u>g->nX) return VALUE_ERROR;
+    if(g==NULL) {printf("graphe vide\n"); exit(1);}
+    if(u<1 || u>g->nX) exit(1);
 
 	p=(g->stations)+u;
-    l=*(p->arc);
+    l=(p->arc);
     for(i=0;i<=v;i++)
     {
-        if(l->suiv==NULL){return VALUE_ERROR;}
+        if(l->suiv==NULL){exit(1);}
 		l=l->suiv;
     }
     l->val.poids_arc=valeur;
@@ -112,15 +112,15 @@ void graphe_ecrit_poids_arc(Graphe g, unsigned int u, unsigned int v, double val
 double graphe_lit_poids_arc(Graphe g, unsigned int u, unsigned int v)
 {
     double valeur;
-    int i=0;
-    Graphe p=NULL;
+    unsigned int i=0;
+    sommet p=NULL;
     Liste l=creer_liste();
-    if(g==NULL) {printf("graphe vide\n"); return VALUE_ERROR;}
+    if(g==NULL) {printf("graphe vide\n"); exit(1);}
     p=(g->stations)+u;
-    l=*(p->arc);
+    l=(p->arc);
     for(i=0;i<=v;i++)
     {
-		if(l->suiv==NULL) {return VALUE_ERROR;}
+		if(l->suiv==NULL) {exit(1);}
         l=l->suiv;
     }
     valeur=l->val.poids_arc;
@@ -129,7 +129,7 @@ double graphe_lit_poids_arc(Graphe g, unsigned int u, unsigned int v)
 
 ///fonctions Haut niveau
 
-/*Graphe lit_graphe(char* fichier)
+Graphe lit_graphe(char* fichier)
 {	FILE* fstation=NULL;
 	Graphe g;
 	sommet p;
@@ -137,31 +137,32 @@ double graphe_lit_poids_arc(Graphe g, unsigned int u, unsigned int v)
 	int nA;
 	int nbstation;
 	double latitude,longitude;
-	char* nmstation[50];
-	char nomligne;  //revoir appelation pour la fonction fscanf et fseek
+	char*	mot=NULL;
+	unsigned char nmstation[50];
+	unsigned char nomligne;  //revoir appelation pour la fonction fscanf et fseek
 	int nbr_noeud=0;
 	int nbr_arc=0;
-	int station_depart;
-	int station_arrivee;
+	unsigned int station_depart;
+	unsigned int station_arrivee;
 	double poids_arc;
 
 	if ((fstation=fopen(fichier,"r+"))==NULL)  {puts("Erreur ouverture fichier"); exit(1);}
 	else
-	{	fscanf(fstation,"%d %d",nX,nA);
+	{	fscanf(fstation,"%d %d",&nX,&nA);
 		g=nouveau_graphe(nX,nA);
 		p=g->stations;
-		fgets(nomligne,200,fstation);
-		while(fscanf(fstation,"%d %lf %lf %s",nbstation,latitude,longitude,nomligne)==4)
+		fgets(mot,200,fstation);
+		while(fscanf(fstation,"%d %lf %lf %s",&nbstation,&latitude,&longitude,&nomligne)==4)
 		{	fgets(nmstation,511,fstation);
-            *(p->nom_station)=nmstation;
-			*(p->nom_ligne)=nomligne;
-			*(p->num_station)=nbstation;
+           		//(p->nom_station)=nmstation;
+			(p->nom_ligne)=nomligne;
+			(p->num_station)=nbstation;
 			nbr_noeud++;
 		}
 		if(nbr_noeud!=nX) {printf("erreur lecture stations\n"); exit(1);} //exit (1) renvoie une erreur
-        fgets(nomligne,200,fstation);
-		while(fscanf("%d %d %lf",station_depart,station_arrivee,poids)==3)
-		{	graphe_ajoute_arc(g,station_depart,station_arrivee,poids);
+       		fgets(mot,200,fstation);
+		while(fscanf(fstation,"%u %u %lf",&station_depart,&station_arrivee,&poids_arc)==3)
+		{	graphe_ajoute_arc(g,station_depart,station_arrivee,poids_arc);
 			nbr_arc++;
 		}
 		if(nbr_arc!=nA) {printf("erreur lecture arc\n"); exit(1);}
@@ -173,17 +174,17 @@ void graphe_ajoute_arc(Graphe g, unsigned int u, unsigned int v, double val)
 {	sommet p=g->stations;
 	ELEMENT e;
 	unsigned int nbrX;
-	
+
 	e.Xdest=v;
 	e.poids_arc=val;
-	
+
 	nbrX=g->nX;
 	if(nbrX<u) {puts("Erreur station depart non presente\n"); exit(1);}
 	p=p+u;
-	*(p->arc)=ajout_queue(e,*(p->arc));
-	
+	(p->arc)=ajout_queue(e,(p->arc));
+
 }
 
-double graphe_pcc(Graphe g, unsigned int u, unsigned int v)
+/*double graphe_pcc(Graphe g, unsigned int u, unsigned int v)
 */
 
