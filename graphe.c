@@ -55,13 +55,13 @@ void graphe_ecrit_nA(Graphe g, unsigned int nA)
 
 unsigned int graphe_lit_nX(Graphe g)
 {
-	g->nX;
+	return g->nX;
 }
 
 
 unsigned int graphe_lit_nA(Graphe g)
 {
-	g->nA;
+	return g->nA;
 }
 
 ///Fonctions de Caroline
