@@ -18,10 +18,10 @@ void affiche_graphe(Graphe g)
 	int i; 
 	sommet* tableau=g->stations;
 	for (i=0; i<g->nX; i++)
-	{printf("Nom de station : %c\n" tableau[i].nom_station);
-	printf("Nom de ligne : %c\n" tableau[i].nom_ligne);
-	printf("Numero de station : %u\n" tableau[i].num_station);
-	printf("Poinds noeud : %d\n" tableau[i].poids_noeud);
+	{printf("Nom de station : %c\n", tableau[i].nom_station);
+	printf("Nom de ligne : %c\n", tableau[i].nom_ligne);
+	printf("Numero de station : %u\n", tableau[i].num_station);
+	printf("Poinds noeud : %d\n", tableau[i].poids_noeud);
   	visualiser_liste(tableau[i]);
 	}
 }
