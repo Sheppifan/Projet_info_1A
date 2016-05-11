@@ -14,6 +14,7 @@ Graphe nouveau_graphe(unsigned int nX,unsigned int nA)
 }
 
 void affiche_graphe(Graphe g)
+{	if(g!=NULL)
 {
 	int i; 
 	sommet* tableau=g->stations;
@@ -24,6 +25,8 @@ void affiche_graphe(Graphe g)
 	printf("Poinds noeud : %d\n", tableau[i].poids_noeud);
   	visualiser_liste(tableau[i]);
 	}
+}
+else return NULL;
 }
 
 
