@@ -15,7 +15,7 @@ int main()
 	for (i=0; i<graphe_lit_nX(Graphe g); i++)
 	{
 		printf("Donnez le nom de station %i\n", i);
-		scanf("%c", &nom);
+		scanf("%s", &nom);
 		tableau[i].nom_station=nom;
 		getchar();
 	}
