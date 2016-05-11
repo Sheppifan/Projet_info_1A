@@ -5,7 +5,7 @@
 int main()
 {
 	printf("Test 1\n");
-	printf("Donnez nX et nA = 1\n");
+	printf("On prends nX et nA = 1\n");
 	unsigned int  nX,nA;
 	nX=2;
 	nA=2;
