@@ -1,5 +1,5 @@
-#include graphe.c
-#include liste.c
+#include "graphe.c"
+#include "liste.c"
 #include <stdio.h>
 
 int main()
@@ -7,15 +7,16 @@ int main()
 	printf("Test 1\n");
 	printf("On prends nX et nA = 1\n");
 	unsigned int  nX,nA;
+	unsigned char nom;
 	nX=2;
 	nA=2;
 	Graphe g = nouveau_graphe( nX, nA);
-	int i;
-	sommet* tableau=Graphe->stations
-	for (i=0; i<graphe_lit_nX(Graphe g); i++)
+	unsigned int i;
+	sommet tableau=g->stations;
+	for (i=0; i<graphe_lit_nX(g); i++)
 	{
 		printf("Donnez le nom de station %i\n", i);
-		scanf("%s", &nom);
+		scanf("%u", &nom);
 		tableau[i].nom_station=nom;
 		getchar();
 	}
@@ -26,3 +27,4 @@ int main()
 	affiche_graphe(g);
 
 }
+
