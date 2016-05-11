@@ -22,7 +22,7 @@ void affiche_graphe(Graphe g)
 	{printf("Nom de station : %c\n", tableau[i].nom_station);
 	printf("Nom de ligne : %c\n", tableau[i].nom_ligne);
 	printf("Numero de station : %u\n", tableau[i].num_station);
-	printf("Poinds noeud : %d\n", tableau[i].poids_noeud);
+	printf("Poids noeud : %d\n", tableau[i].poids_noeud);
   	visualiser_liste(tableau[i]);
 	}
 }
@@ -75,36 +75,36 @@ double graphe_lit_poids(Graphe g, unsigned int u)       //lit le poids du noeud 
 {
     sommet p=(g->stations);
     double poids_noeud;
-   //int i=0;
-    if(g==NULL) { printf("graphe vide\n"); return 0;}
-    /*for(i=0;i<=u;i++)
-    {   if(p+1==NULL) { printf("graphe vide\n"); return 0;}
-        else p=p+1;
-    }*/
+    if(g==NULL) { printf("graphe vide\n"); return 0;}	//Il faut retourner une erreur type VALUE ERROR
+	if(u<1 || u>g->nX) return VALUE_ERROR;
+
     p=p+u;
-    poids_noeud=*(p->poids_noeud);
+    poids_noeud=*p->poids_noeud;
     return poids_noeud;
 }
 
 void graphe_ecrit_poids(Graphe g, unsigned int u, double valeur) //ecrit dans le champ poids_noeud le poids du noeud u du graphe g
 {
-    //Graphe p=g;
-    if(g==NULL) printf("graphe vide\n");
-    *(((g-<stations)+u)->poids_noeud)=valeur;
+    if(g==NULL) {printf("graphe vide\n"); return VALUE_ERROR;}
+	if(u<1 || u>g->nX) return VALUE_ERROR;
 
+    (*((g->stations)+u))->poids_noeud=valeur;
 }
 
 void graphe_ecrit_poids_arc(Graphe g, unsigned int u, unsigned int v, double valeur)///ameliorer les tests
 {
     int i=0;
-    Graphe p=g->stations;
+    sommet p=NULL;
     Liste l=creer_liste();
-    if(g==NULL) printf("graphe vide\n");
-    p=p+u;
+    if(g==NULL) {printf("graphe vide\n"); return VALUE_ERROR;}
+    if(u<1 || u>g->nX) return VALUE_ERROR;
+
+	p=(g->stations)+u;
     l=*(p->arc);
     for(i=0;i<=v;i++)
     {
-        l=l->suiv;
+        if(l->suiv==NULL){return VALUE_ERROR;}
+		l=l->suiv;
     }
     l->val.poids_arc=valeur;
 }
@@ -113,13 +113,14 @@ double graphe_lit_poids_arc(Graphe g, unsigned int u, unsigned int v)
 {
     double valeur;
     int i=0;
-    Graphe p=g->stations;
+    Graphe p=NULL;
     Liste l=creer_liste();
-    if(g==NULL) printf("graphe vide\n");
-    p=p+u;
+    if(g==NULL) {printf("graphe vide\n"); return VALUE_ERROR;}
+    p=(g->stations)+u;
     l=*(p->arc);
     for(i=0;i<=v;i++)
     {
+		if(l->suiv==NULL) {return VALUE_ERROR;}
         l=l->suiv;
     }
     valeur=l->val.poids_arc;
@@ -136,27 +137,29 @@ double graphe_lit_poids_arc(Graphe g, unsigned int u, unsigned int v)
 	int nA;
 	int nbstation;
 	double latitude,longitude;
-	char* nmstation[50],nomligne[50];  //revoir appelation pour la fonction fscanf et fseek
+	char* nmstation[50];
+	char nomligne;  //revoir appelation pour la fonction fscanf et fseek
 	int nbr_noeud=0;
 	int nbr_arc=0;
 	int station_depart;
 	int station_arrivee;
 	double poids_arc;
-	
-	if ((fstation=fopen(fichier,"r+"))==NULL)  {puts("Erreur ouverture fichier"); exit(1);}   //revoir la sortie de fionction
+
+	if ((fstation=fopen(fichier,"r+"))==NULL)  {puts("Erreur ouverture fichier"); exit(1);}
 	else
 	{	fscanf(fstation,"%d %d",nX,nA);
 		g=nouveau_graphe(nX,nA);
 		p=g->stations;
-		if(fseek(fstation,18,SEEK_CUR)!=0) {printf("erreur"); exit(1);}  //revoir fseek
-		while(fscanf(fstation,"%d %lf %lf %s %s",nbstation,latitude,longitude,nmstation,nomligne)==5)
-		{	*(p->nom_station)=nmstation;
+		fgets(nomligne,200,fstation);
+		while(fscanf(fstation,"%d %lf %lf %s",nbstation,latitude,longitude,nomligne)==4)
+		{	fgets(nmstation,511,fstation);
+            *(p->nom_station)=nmstation;
 			*(p->nom_ligne)=nomligne;
 			*(p->num_station)=nbstation;
 			nbr_noeud++;
 		}
-		if(nbr_noeud!=nX) {printf("erreur lecture stations\n"); exit(1);}
-		if(fseek(fstation,38,SEEK_CUR)!=0) {printf("erreur"); exit(1);}  //revoir fseek 
+		if(nbr_noeud!=nX) {printf("erreur lecture stations\n"); exit(1);} //exit (1) renvoie une erreur
+        fgets(nomligne,200,fstation);
 		while(fscanf("%d %d %lf",station_depart,station_arrivee,poids)==3)
 		{	graphe_ajoute_arc(g,station_depart,station_arrivee,poids);
 			nbr_arc++;
