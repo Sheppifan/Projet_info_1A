@@ -2,25 +2,26 @@
 #include "liste.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 
 /// Fonctions de laure
 Graphe nouveau_graphe(unsigned int nX,unsigned int nA)
 {
-	Graphe g=calloc(1,sizeof(g));
+	Graphe g=calloc(1,sizeof(Graphe));
 	sommet tableau=calloc(nX,sizeof(tableau));
-
+    g->stations=tableau;
 	g->nX=nX;
 	g->nA=nA;
 	return g;
 }
 
 void affiche_graphe(Graphe g)
-{	unsigned int i; 
+{	unsigned int i;
 	sommet tableau=g->stations;
 	for (i=0; i<g->nX; i++)
 	{printf("Nom de station : %s\n", tableau[i].nom_station);
-	printf("Nom de ligne : %u\n", tableau[i].nom_ligne);
+	printf("Nom de ligne : %s\n", tableau[i].nom_ligne);
 	printf("Numero de station : %u\n", tableau[i].num_station);
 	printf("Poids noeud : %lf\n", tableau[i].poids_noeud);
   	visualiser_liste(tableau[i].arc);
@@ -32,7 +33,7 @@ void affiche_graphe(Graphe g)
 
 void detruit_graphe(Graphe g)
 {
-	unsigned int i; 
+	unsigned int i;
 	sommet tableau=g->stations;
 	for (i=0; i<g->nX; i++)
 	{
@@ -40,7 +41,7 @@ void detruit_graphe(Graphe g)
 	}
 	free(g->stations);
 	free(g);
-	
+
 }
 
 
@@ -135,11 +136,11 @@ Graphe lit_graphe(char* fichier)
 	sommet p;
 	int nX;
 	int nA;
-	int nbstation;
+	unsigned int nbstation;
 	double latitude,longitude;
-	char*	mot=NULL;
+	char mot[512];
 	unsigned char nmstation[50];
-	unsigned char nomligne;  //revoir appelation pour la fonction fscanf et fseek
+	unsigned char nomligne[50];  //revoir appelation pour la fonction fscanf et fseek
 	int nbr_noeud=0;
 	int nbr_arc=0;
 	unsigned int station_depart;
@@ -150,20 +151,27 @@ Graphe lit_graphe(char* fichier)
 	else
 	{	fscanf(fstation,"%d %d",&nX,&nA);
 		g=nouveau_graphe(nX,nA);
+		printf("nX=%d, nA=%d\n",nX,nA);
 		p=g->stations;
-		fgets(mot,200,fstation);
-		while(fscanf(fstation,"%d %lf %lf %s",&nbstation,&latitude,&longitude,&nomligne)==4)
+		fgets(mot,511,fstation);
+		fgets(mot,511,fstation);
+		while(fscanf(fstation,"%d %lf %lf %s ",&nbstation,&latitude,&longitude,&nomligne)==4)
 		{	fgets(nmstation,511,fstation);
-           		//(p->nom_station)=nmstation;
-			(p->nom_ligne)=nomligne;
+			printf("nbstation=%d, lat=%lf, long=%lf, nomligne=%s,nmstation=%s\n",nbstation,latitude,longitude,nomligne,nmstation);
+            strcpy(p->nom_station,nmstation);//(p->nom_station)=nmstation;
+            strcpy(p->nom_ligne,nomligne);//(p->nom_ligne)=nomligne;
 			(p->num_station)=nbstation;
+			p++;
 			nbr_noeud++;
+printf("nbnoeud=%d\n",nbr_noeud);
 		}
 		if(nbr_noeud!=nX) {printf("erreur lecture stations\n"); exit(1);} //exit (1) renvoie une erreur
-       		fgets(mot,200,fstation);
+        fgets(mot,511,fstation);
 		while(fscanf(fstation,"%u %u %lf",&station_depart,&station_arrivee,&poids_arc)==3)
-		{	graphe_ajoute_arc(g,station_depart,station_arrivee,poids_arc);
-			nbr_arc++;
+		{	printf("depart=%u, arrivee=%u, valeur=%lf\n",station_depart,station_arrivee,poids_arc);
+            graphe_ajoute_arc(g,station_depart,station_arrivee,poids_arc);
+		    nbr_arc++;
+            printf("nbarc=%d\n",nbr_arc);
 		}
 		if(nbr_arc!=nA) {printf("erreur lecture arc\n"); exit(1);}
 	}
@@ -181,7 +189,7 @@ void graphe_ajoute_arc(Graphe g, unsigned int u, unsigned int v, double val)
 	nbrX=g->nX;
 	if(nbrX<u) {puts("Erreur station depart non presente\n"); exit(1);}
 	p=p+u;
-	(p->arc)=ajout_queue(e,(p->arc));
+	p->arc=ajout_queue(e,p->arc);
 
 }
 

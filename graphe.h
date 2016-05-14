@@ -6,21 +6,11 @@
 #ifndef _Graphe
 #define _Graphe
 
-/*typedef struct {
-    unsigned char nom_station[50];
-    unsigned int nmligne;
-    unsigned int nX;
-    unsigned int nA;
-    double poids_noeud;
-    Liste arc;
-    }* Graphe;*/
-// deuxième solution
-
 
 
 typedef struct {
 	unsigned char nom_station[50];
-	unsigned char nom_ligne;
+	unsigned char nom_ligne[50];
 	unsigned int num_station;
 	double poids_noeud;
 	Liste arc;
@@ -31,7 +21,7 @@ typedef struct {
 	unsigned int nX;
 	unsigned int nA;
 	}* Graphe;
-	
+
 Graphe nouveau_graphe(unsigned int nX,unsigned int nA);
 void affiche_graphe(Graphe g);
 void detruit_graphe(Graphe g);
