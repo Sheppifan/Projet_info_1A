@@ -10,9 +10,14 @@ Graphe nouveau_graphe(unsigned int nX,unsigned int nA)
 {
 	Graphe g=calloc(1,sizeof(Graphe));
 	sommet tableau=calloc(nX,sizeof(tableau));
+	unsigned int i=0;
     g->stations=tableau;
 	g->nX=nX;
 	g->nA=nA;
+	for(i=0;i<nX;i++ )
+    {
+        (tableau+i)->arc=creer_liste();
+    }
 	return g;
 }
 
@@ -20,11 +25,12 @@ void affiche_graphe(Graphe g)
 {	unsigned int i;
 	sommet tableau=g->stations;
 	for (i=0; i<g->nX; i++)
-	{printf("Nom de station : %s\n", tableau[i].nom_station);
-	printf("Nom de ligne : %s\n", tableau[i].nom_ligne);
-	printf("Numero de station : %u\n", tableau[i].num_station);
-	printf("Poids noeud : %lf\n", tableau[i].poids_noeud);
-  	visualiser_liste(tableau[i].arc);
+	{
+        printf("Nom de station : %s\n", tableau[i].nom_station);
+        printf("Nom de ligne : %s\n", tableau[i].nom_ligne);
+        printf("Numero de station : %u\n", tableau[i].num_station);
+        printf("Poids noeud : %lf\n", tableau[i].poids_noeud);
+        visualiser_liste(tableau[i].arc);
 	}
 
 }
