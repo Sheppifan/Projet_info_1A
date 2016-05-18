@@ -9,7 +9,7 @@
 Graphe nouveau_graphe(unsigned int nX,unsigned int nA)
 {
 	Graphe g=calloc(1,sizeof(Graphe));
-	sommet tableau=calloc(nX,sizeof(tableau));
+	sommet tableau=calloc(nX,sizeof(*sommet));
 	unsigned int i=0;
     g->stations=tableau;
 	g->nX=nX;
@@ -161,23 +161,26 @@ Graphe lit_graphe(char* fichier)
 		p=g->stations;
 		fgets(mot,511,fstation);
 		fgets(mot,511,fstation);
-		while(fscanf(fstation,"%d %lf %lf %s ",&nbstation,&latitude,&longitude,&nomligne)==4)
+		while(fscanf(fstation,"%u %lf %lf %s ",&nbstation,&latitude,&longitude,nomligne)==4)
 		{	fgets(nmstation,511,fstation);
 			printf("nbstation=%d, lat=%lf, long=%lf, nomligne=%s,nmstation=%s\n",nbstation,latitude,longitude,nomligne,nmstation);
-            strcpy(p->nom_station,nmstation);//(p->nom_station)=nmstation;
-            strcpy(p->nom_ligne,nomligne);//(p->nom_ligne)=nomligne;
+		        strcpy(p->nom_station,nmstation);//(p->nom_station)=nmstation;
+ 		        strcpy(p->nom_ligne,nomligne);//(p->nom_ligne)=nomligne;
 			(p->num_station)=nbstation;
+			printf("nbstation=%d,nomligne=%s,nmstation=%s\n",(p->num_station),p->nom_ligne,p->nom_station);
 			p++;
 			nbr_noeud++;
-printf("nbnoeud=%d\n",nbr_noeud);
+//printf("nbnoeud=%d\n",nbr_noeud);
 		}
 		if(nbr_noeud!=nX) {printf("erreur lecture stations\n"); exit(1);} //exit (1) renvoie une erreur
         fgets(mot,511,fstation);
 		while(fscanf(fstation,"%u %u %lf",&station_depart,&station_arrivee,&poids_arc)==3)
-		{	printf("depart=%u, arrivee=%u, valeur=%lf\n",station_depart,station_arrivee,poids_arc);
+		{	//printf("depart=%u, arrivee=%u, valeur=%lf\n",station_depart,station_arrivee,poids_arc);
             graphe_ajoute_arc(g,station_depart,station_arrivee,poids_arc);
+			p=(g->stations)+station_depart;
+			printf("nbstation=%d,nomligne=%s,nmstation=%s\n",(p->num_station),p->nom_ligne,p->nom_station);
 		    nbr_arc++;
-            printf("nbarc=%d\n",nbr_arc);
+           // printf("nbarc=%d\n",nbr_arc);
 		}
 		if(nbr_arc!=nA) {printf("erreur lecture arc\n"); exit(1);}
 	}
@@ -188,15 +191,18 @@ void graphe_ajoute_arc(Graphe g, unsigned int u, unsigned int v, double val)
 {	sommet p=g->stations;
 	ELEMENT e;
 	unsigned int nbrX;
-
+    printf("%s\n",p->nom_ligne);
 	e.Xdest=v;
 	e.poids_arc=val;
-
+    printf("%s\n",p->nom_ligne);
 	nbrX=g->nX;
 	if(nbrX<u) {puts("Erreur station depart non presente\n"); exit(1);}
 	p=p+u;
-	p->arc=ajout_queue(e,p->arc);
+	/*printf("pointeurnom_ligne=%p\n",&(g->stations)->nom_ligne);
+	printf("pointeurnumstation=%p\n",&(g->stations)->num_station);*/
 
+		p->arc=ajout_queue(e,p->arc);
+	//printf("%p\n",&(g->stations)->nom_ligne);
 }
 
 /*double graphe_pcc(Graphe g, unsigned int u, unsigned int v)
