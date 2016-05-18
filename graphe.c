@@ -205,6 +205,64 @@ void graphe_ajoute_arc(Graphe g, unsigned int u, unsigned int v, double val)
 	//printf("%p\n",&(g->stations)->nom_ligne);
 }
 
-/*double graphe_pcc(Graphe g, unsigned int u, unsigned int v)
-*/
+// fonctions chemin:
 
+void bellman(Graphe g, unsigned int s)
+{
+    unsigned int nonstab= 0, i;
+    unsigned int u,v;
+    double poids_inf = 10000;
+    Sommet p
+
+    for(i=0; i<graphe_lit_nX(g); i++){
+        graphe_ecrit_poids(g, i, poids_inf);
+    }
+graphe_ecrit_poids(g,d,0);
+
+    while (!nonstab){
+        nonstab = 1;
+        for(i=0; i<graphe_lit_nA(g); i++){
+            u= g.station[i].pere;
+            v= g.station[i]->arc.Xdest;
+            if( graphe_lit_poids(g, u) + graphe_lit_poids_arc(g,u,v) < graphe_lit_poids(g, v))
+            {
+               graphe_ecrit_poids(g,v) = graphe_lit_poids(g,u) + graphe_lit_poids_arc(g,u,v));
+               g.station[v].pere=u;
+               nonstab = 0;
+            }
+        }
+    }
+}
+
+
+
+/* a finir
+void pcc(Graphe g, unsigned int u, int v)
+{
+    unsigned int position = v, duree = 0, nbchangements = 0;
+    int itineraire[100];
+    int changements[100];
+    changements[0]=-10;
+    itineraire[0] = v;
+    bellman(g, u);
+    if ( graphe_lit_poids(g, v)== 10000){
+        printf("Aucun itineraire trouve\n");
+    }
+    else{
+        double temps = graphe_lit_poids(g, v);
+        while(position != u)
+        	{ 
+        		position = g.station[position].pere;
+            if (strcmp(g.station[position].nom_ligne, g.station[itineraire[duree]].nom_ligne)){
+                printf("Changement entre %s et %s\n", g.station[itineraire[duree]].nom_ligne, g.station[position].nom_ligne);
+                changements[nbchangements] = duree;
+                nbchangements++;
+            }
+            duree++;
+            itineraire[duree] = position;
+        }
+    }
+
+}
+
+*/
