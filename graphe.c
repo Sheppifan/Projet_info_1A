@@ -236,12 +236,12 @@ graphe_ecrit_poids(g,d,0);
 
 
 
-/* a finir
+
 void pcc(Graphe g, unsigned int u, int v)
 {
-    unsigned int position = v, duree = 0, nbchangements = 0;
-    int itineraire[100];
-    int changements[100];
+    unsigned int position = v, nbstations=0, nbchangements=0,i,;
+    unsigned int itineraire[100];
+    unsigned int changements[100];
     changements[0]=-10;
     itineraire[0] = v;
     bellman(g, u);
@@ -253,16 +253,24 @@ void pcc(Graphe g, unsigned int u, int v)
         while(position != u)
         	{ 
         		position = g.station[position].pere;
-            if (strcmp(g.station[position].nom_ligne, g.station[itineraire[duree]].nom_ligne)){
-                printf("Changement entre %s et %s\n", g.station[itineraire[duree]].nom_ligne, g.station[position].nom_ligne);
-                changements[nbchangements] = duree;
+            if (strcmp(g.station[position].nom_ligne, g.station[itineraire[nbstations]].nom_ligne)){
+                printf("Changement entre %s et %s\n", g.station[itineraire[nbstations]].nom_ligne, g.station[position].nom_ligne);
+                changements[nbchangements] = nbstations;
                 nbchangements++;
             }
-            duree++;
-            itineraire[duree] = position;
+            nbstations++;
+            itineraire[nbstation] = position;
         }
+        printf("Trajet entre les stations %s et %s :\n\n", g.station[u].nom_ligne, g.station[v].nom_ligne);
+        printf("Durée du trajet : %d\n ", temps);
+        printf("Nombre de stations : %u\n", nbstations);
+        printf("Nombre de changements : %u\n\n", nbchangement);
+        printf("Itineraire : \n");
+        for(i=0;i<nbstations;i++)
+        {
+        	printf("Etape %u : %s\n", g.stations[itinéraire[i]].nom_ligne,g.stations[itinéraire[i]].num_ligne);
+        }
+
     }
 
 }
-
-*/
