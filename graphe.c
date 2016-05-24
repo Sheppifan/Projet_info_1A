@@ -237,7 +237,7 @@ graphe_ecrit_poids(g,d,0);
 
 
 
-void pcc(Graphe g, unsigned int u, int v)
+void pcc(Graphe g, unsigned int u, unsigned int v)
 {
     unsigned int position = v, nbstations=0, nbchangements=0,i,;
     unsigned int itineraire[100];
