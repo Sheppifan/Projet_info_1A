@@ -161,11 +161,11 @@ Graphe lit_graphe(char* fichier)
 		fgets(mot,511,fstation);
 		while(fscanf(fstation,"%u %lf %lf %s ",&nbstation,&latitude,&longitude,nomligne)==4)
 		{	fgets(nmstation,511,fstation);
-			printf("nbstation=%d, lat=%lf, long=%lf, nomligne=%s,nmstation=%s\n",nbstation,latitude,longitude,nomligne,nmstation);
+			//printf("nbstation=%d, lat=%lf, long=%lf, nomligne=%s,nmstation=%s\n",nbstation,latitude,longitude,nomligne,nmstation);
 		        strcpy(p->nom_station,nmstation);//(p->nom_station)=nmstation;
  		        strcpy(p->nom_ligne,nomligne);//(p->nom_ligne)=nomligne;
 			(p->num_station)=nbstation;
-			printf("nbstation=%d,nomligne=%s,nmstation=%s\n",(p->num_station),p->nom_ligne,p->nom_station);
+			//printf("nbstation=%d,nomligne=%s,nmstation=%s\n",(p->num_station),p->nom_ligne,p->nom_station);
 			p++;
 			nbr_noeud++;
 //printf("nbnoeud=%d\n",nbr_noeud);
@@ -176,7 +176,7 @@ Graphe lit_graphe(char* fichier)
 		{	//printf("depart=%u, arrivee=%u, valeur=%lf\n",station_depart,station_arrivee,poids_arc);
             graphe_ajoute_arc(g,station_depart,station_arrivee,poids_arc);
 			p=(g->stations)+station_depart;
-			printf("nbstation=%d,nomligne=%s,nmstation=%s\n",(p->num_station),p->nom_ligne,p->nom_station);
+			//printf("nbstation=%d,nomligne=%s,nmstation=%s\n",(p->num_station),p->nom_ligne,p->nom_station);
 		    nbr_arc++;
            // printf("nbarc=%d\n",nbr_arc);
 		}
@@ -190,10 +190,10 @@ void graphe_ajoute_arc(Graphe g, unsigned int u, unsigned int v, double val)
 {	sommet p=g->stations;
 	ELEMENT e;
 	unsigned int nbrX;
-    printf("%s\n",p->nom_ligne);
+   
 	e.Xdest=v;
 	e.poids_arc=val;
-    printf("%s\n",p->nom_ligne);
+
 	nbrX=g->nX;
 	if(nbrX<u) {puts("Erreur station depart non presente\n"); exit(1);}
 	p=p+u;
@@ -217,11 +217,11 @@ void bellman(Graphe g, unsigned int s)
         graphe_ecrit_poids(g, i, poids_inf);
     }
     graphe_ecrit_poids(g,s,0);
-
+     printf("erreur");
     while (!nonstab) {
         nonstab = 1;
         for(i=0; i<graphe_lit_nA(g); i++) {
-            u= tableau[i].pere;
+            u= tableau[i].num_station;
             v= tableau[i].arc->val.Xdest;
             if( graphe_lit_poids(g, u) + graphe_lit_poids_arc(g,u,v) < graphe_lit_poids(g, v))
             {   
@@ -249,6 +249,7 @@ void graphe_pcc(Graphe g, unsigned int u, unsigned int v)
     sommet tableau=g->stations;
     changements[0]=-10;
     itineraire[0] = v;
+    affiche_graphe(g);
     bellman(g, u);
     if ( graphe_lit_poids(g, v)== poids_inf) {
         printf("Aucun itineraire trouve\n");
@@ -278,57 +279,4 @@ void graphe_pcc(Graphe g, unsigned int u, unsigned int v)
 
     }
 
-}
-
-Liste recherche_station(Graphe g,unsigned char nom-station)
-{	sommet p=g->stations;
-	unsigned int nX=g->nX;
-	unsigned int i=0;
-	Liste numsommet=creer_liste();
-	ELEMENT e;
-
-	for(i=0;i<nX;i++)
-	{	if(!strcmp(nom-station,p->nom_station))
-		{	e.Xdest=p->num_station;
-			e.poids_arc=0;
-			numsommet=ajout_tete(e,numsommet);
-		}
-		p++;
-	}
-	return numsommet;
-}
-
-void pcc_plsr_stations(Graphe g, Liste departs, Liste arrivee)
-{	unsigned int depart;
-	unsigned int arrivee;
-	unsigned int i=0,j=0;
-
-	unsigned int taille_liste1=0;
-	unsigned int taille_liste2=0;
-	double temps1=5000;
-	unsigned int itineraire2[100];
-	
-	Liste ldep=departs;
-	Liste larr=arrivee;
-
-	while(ldep->suiv!=NULL)
-	{	taille_liste1++;
-	}
-	while(larr->suiv!=NULL)
-	{	taille_liste2++;
-	}
-	ldep=departs;
-	larr=arrivee;
-
-	for(i=0; i<taille_liste1;i++)
-	{	for(j=0;j<taille_liste2;j++)
-		{	graphe_pcc(g,ldep->val.Xdest, larr->val.Xdest);
-			if(temps<temps1) {
-				temps1=temps;
-				itineraire2=itineraire;
-				}
-			larr=larr->suiv;
-		}
-		larr=arrivee;
-	}
 }
