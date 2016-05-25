@@ -9,7 +9,7 @@
 Graphe nouveau_graphe(unsigned int nX,unsigned int nA)
 {
 	Graphe g=calloc(1,sizeof(Graphe));
-	sommet tableau=calloc(nX,sizeof(*sommet));
+	sommet tableau=calloc(nX,sizeof(*tableau));
 	unsigned int i=0;
     g->stations=tableau;
 	g->nX=nX;
@@ -207,13 +207,12 @@ void graphe_ajoute_arc(Graphe g, unsigned int u, unsigned int v, double val)
 
 // fonctions chemin:
 
-
 void bellman(Graphe g, unsigned int s)
 {
     unsigned int nonstab= 0, i;
     unsigned int u,v;
     double poids_inf = 10000;
-    sommet p;
+    sommet tableau=g->stations;
 
     for(i=0; i<graphe_lit_nX(g); i++)
         {
@@ -224,12 +223,12 @@ void bellman(Graphe g, unsigned int s)
     while (!nonstab){
         nonstab = 1;
         for(i=0; i<graphe_lit_nA(g); i++){
-            u= (g->stations)[i].pere;
-            v= (g->stations)[i]->arc.Xdest;
+            u= tableau[i].pere;
+            v= tableau[i].arc->val.Xdest;
             if( graphe_lit_poids(g, u) + graphe_lit_poids_arc(g,u,v) < graphe_lit_poids(g, v))
             {
                graphe_ecrit_poids(g,v,graphe_lit_poids(g,u) + graphe_lit_poids_arc(g,u,v));
-               (g->stations)[v].pere=u;
+               tableau[v].pere=u;
                nonstab = 0;
             }
         }
@@ -247,33 +246,36 @@ void pcc(Graphe g, unsigned int u, unsigned int v)
     unsigned int i;
     unsigned int itineraire[100];
     unsigned int changements[100];
+    double temps;
+    double poids_inf = 10000;
+    sommet tableau=g->stations;
     changements[0]=-10;
     itineraire[0] = v;
     bellman(g, u);
-    if ( graphe_lit_poids(g, v)== 10000){
+    if ( graphe_lit_poids(g, v)== poids_inf){
         printf("Aucun itineraire trouve\n");
     }
     else{
-        double temps = graphe_lit_poids(g, v);
+        temps = graphe_lit_poids(g, v);
         while(position != u)
         	{
-        		position = g.stations[position].pere;
-            if (strcmp(g.stations[position].nom_ligne, g.stations[itineraire[nbstations]].nom_ligne)){
-                printf("Changement entre %s et %s\n", g.stations[itineraire[nbstations]].nom_ligne, g.stations[position].nom_ligne);
+        		position = tableau[position].pere;
+            if (strcmp(tableau[position].nom_ligne, tableau[itineraire[nbstations]].nom_ligne)){
+                printf("Changement entre %s et %s\n", tableau[itineraire[nbstations]].nom_ligne, tableau[position].nom_ligne);
                 changements[nbchangements] = nbstations;
                 nbchangements++;
             }
             nbstations++;
-            itineraire[nbstation] = position;
+            itineraire[nbstations] = position;
         }
-        printf("Trajet entre les stations %s et %s :\n\n", g.station[u].nom_ligne, g.station[v].nom_ligne);
-        printf("Durée du trajet : %d\n ", temps);
+        printf("Trajet entre les stations %s et %s :\n\n", tableau[u].nom_ligne, tableau[v].nom_ligne);
+        printf("Durée du trajet : %lf\n ", temps);
         printf("Nombre de stations : %u\n", nbstations);
-        printf("Nombre de changements : %u\n", nbchangement);
+        printf("Nombre de changements : %u\n", nbchangements);
         printf("Itineraire : \n");
         for(i=0;i<nbstations;i++)
         {
-        	printf("Etape %u : %s\n", g.stations[itineraire[i]].nom_ligne,g.stations[itineraire[i]].num_ligne);
+        	printf("Etape %u : %s %u\n",i, tableau[itineraire[i]].nom_ligne,tableau[itineraire[i]].num_station);
         }
 
     }
