@@ -238,7 +238,7 @@ void bellman(Graphe g, unsigned int s)
 
 
 
-void pcc(Graphe g, unsigned int u, unsigned int v)
+void graphe_pcc(Graphe g, unsigned int u, unsigned int v)
 {
     unsigned int position = v;
     unsigned int nbstations=0;
