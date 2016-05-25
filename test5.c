@@ -9,7 +9,7 @@ int main()
 {
   unsigned int depart,arrivee;
   Graphe g;
-  char* fichier="graphe1.csv";
+  char* fichier="metro.csv";
   g=lit_graphe(fichier);
 
   printf("Donner le umero de station de depart : \n");
