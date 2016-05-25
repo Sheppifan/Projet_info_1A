@@ -279,3 +279,56 @@ void graphe_pcc(Graphe g, unsigned int u, unsigned int v)
     }
 
 }
+
+Liste recherche_station(Graphe g,unsigned char nom-station)
+{	sommet p=g->stations;
+	unsigned int nX=g->nX;
+	unsigned int i=0;
+	Liste numsommet=creer_liste();
+	ELEMENT e;
+
+	for(i=0;i<nX;i++)
+	{	if(!strcmp(nom-station,p->nom_station))
+		{	e.Xdest=p->num_station;
+			e.poids_arc=0;
+			numsommet=ajout_tete(e,numsommet);
+		}
+		p++;
+	}
+	return numsommet;
+}
+
+void pcc_plsr_stations(Graphe g, Liste departs, Liste arrivee)
+{	unsigned int depart;
+	unsigned int arrivee;
+	unsigned int i=0,j=0;
+
+	unsigned int taille_liste1=0;
+	unsigned int taille_liste2=0;
+	double temps1=5000;
+	unsigned int itineraire2[100];
+	
+	Liste ldep=departs;
+	Liste larr=arrivee;
+
+	while(ldep->suiv!=NULL)
+	{	taille_liste1++;
+	}
+	while(larr->suiv!=NULL)
+	{	taille_liste2++;
+	}
+	ldep=departs;
+	larr=arrivee;
+
+	for(i=0; i<taille_liste1;i++)
+	{	for(j=0;j<taille_liste2;j++)
+		{	graphe_pcc(g,ldep->val.Xdest, larr->val.Xdest);
+			if(temps<temps1) {
+				temps1=temps;
+				itineraire2=itineraire;
+				}
+			larr=larr->suiv;
+		}
+		larr=arrivee;
+	}
+}
