@@ -39,7 +39,7 @@ int main()
 	char* fichier="metro.csv";
 	
 	g=lit_graphe(fichier);
-	
+	cond :
 	printf("1 : nouveau trajet\n");
 	printf("0 : quitter\n");
 	switch(condition)
@@ -49,16 +49,12 @@ int main()
 			scanf("%u\n",&depart);
 			printf("entrez la station d'arrivee\n");
 			scanf("%u\n",&arrivee);
-
 			pcc(g,depart,arrivee);
-			
+			goto cond;
 			break;
 			
 		case 2 :
 			return 1;
-		
-
-
-
-	return 1;
+			break;
+	}
 }
