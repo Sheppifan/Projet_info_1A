@@ -83,7 +83,7 @@ double graphe_lit_poids(Graphe g, unsigned int u)       //lit le poids du noeud 
     sommet p=(g->stations);
     double poids_noeud;
     if(g==NULL) { printf("graphe vide\n"); exit(1);}	
-	if(u<0 || u>g->nX) {printf("la valeur de u n'est pas comprise entre %d et%d\n", 0, g->nX); exit(1);}
+	if(u>g->nX) {printf("la valeur de u n'est pas comprise entre %d et%u\n", 0, g->nX); exit(1);}
 
     p=p+u;
     poids_noeud=p->poids_noeud;
@@ -104,7 +104,7 @@ void graphe_ecrit_poids_arc(Graphe g, unsigned int u, unsigned int v, double val
     sommet p=NULL;
     Liste l=creer_liste();
     if(g==NULL) {printf("graphe vide\n"); exit(1);}
-    if(u<0 || u>g->nX) {printf("la valeur de u n'est pas comprise entre %d et %d\n",0 et g-<nX);exit(1);}
+    if(u>g->nX) {printf("la valeur de u n'est pas comprise entre %d et %d\n",0, g->nX);exit(1);}
 
 	p=(g->stations)+u;
     l=(p->arc);
@@ -119,7 +119,6 @@ void graphe_ecrit_poids_arc(Graphe g, unsigned int u, unsigned int v, double val
 double graphe_lit_poids_arc(Graphe g, unsigned int u, unsigned int v)
 {
     double valeur;
-    unsigned int i=0;
     sommet p=NULL;
     Liste l=creer_liste();
     if(g==NULL) {printf("graphe vide\n"); exit(1);}
