@@ -14,7 +14,7 @@ demande station arrivee
 
 belleman et plus court chemin
 
-affichage information:
+affichage information dans pcc
 	trajet
 	temps de trajet
 	
@@ -34,30 +34,26 @@ int main()
 	//unsigned char arrivee[50];
 	unsigned int depart;
 	unsigned int arrivee;
+	unsigned int condition;
 	
 	char* fichier="metro.csv";
 	
 	g=lit_graphe(fichier);
+	switch(condition)
+	{	case 1 :
 	
-	
-	printf("entrez la station de depart\n");
-	scanf("%u\n",&depart);
-	printf("entrez la station d'arrivee\n");
-	scanf("%u\n",&arrivee);
+			printf("entrez la station de depart\n");
+			scanf("%u\n",&depart);
+			printf("entrez la station d'arrivee\n");
+			scanf("%u\n",&arrivee);
 
-	ppc(g,depart,arrivee);
-
+			pcc(g,depart,arrivee);
+			
+			break;
+			
+		case 2 :
+			return 1;
 		
-	
-
-
-
-
-
-
-
-
-
 
 
 
