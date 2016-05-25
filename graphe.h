@@ -38,6 +38,7 @@ double graphe_lit_poids_arc(Graphe g, unsigned int u, unsigned int v);
 
 Graphe lit_graphe(char* fichier);
 void graphe_ajoute_arc(Graphe g, unsigned int u, unsigned int v, double val);
-double graphe_pcc(Graphe g, unsigned int u, unsigned int v);
+void bellman(Graphe g, unsigned int u);
+void graphe_pcc(Graphe g, unsigned int u, unsigned int v);
 
 #endif // _Graphe
