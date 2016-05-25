@@ -183,6 +183,7 @@ Graphe lit_graphe(char* fichier)
 		}
 		if(nbr_arc!=nA) {printf("erreur lecture arc\n"); exit(1);}
 	}
+	printf("nX=%u et nA=%u\n", g->nX,g->nA);
 	return g;
 }
 
