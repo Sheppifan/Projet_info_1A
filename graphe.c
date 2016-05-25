@@ -91,11 +91,11 @@ double graphe_lit_poids(Graphe g, unsigned int u)       //lit le poids du noeud 
 }
 
 void graphe_ecrit_poids(Graphe g, unsigned int u, double valeur) //ecrit dans le champ poids_noeud le poids du noeud u du graphe g
-{
-    if(g==NULL) {printf("graphe vide\n"); exit(1);}
-	if(u<1 || u>g->nX) exit(1);
+{	sommet p=g->stations;
+	
+    	if(g==NULL) {printf("graphe vide\n"); exit(1);}
 
-    (*((g->stations)+u)).poids_noeud=valeur;
+    	(p+u)->poids_noeud=valeur;
 }
 
 void graphe_ecrit_poids_arc(Graphe g, unsigned int u, unsigned int v, double valeur)///ameliorer les tests
