@@ -40,5 +40,6 @@ Graphe lit_graphe(char* fichier);
 void graphe_ajoute_arc(Graphe g, unsigned int u, unsigned int v, double val);
 void bellman(Graphe g, unsigned int u);
 void graphe_pcc(Graphe g, unsigned int u, unsigned int v);
-
+Liste recherche_station(Graphe g,unsigned char nom-station)
+void pcc_plsr_stations(Graphe g, Liste departs, Liste arrivee)
 #endif // _Graphe
