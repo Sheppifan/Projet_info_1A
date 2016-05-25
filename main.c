@@ -39,6 +39,9 @@ int main()
 	char* fichier="metro.csv";
 	
 	g=lit_graphe(fichier);
+	
+	printf("1 : nouveau trajet\n");
+	printf("0 : quitter\n");
 	switch(condition)
 	{	case 1 :
 	
