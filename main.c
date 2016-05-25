@@ -30,20 +30,22 @@ voir retour sur case
 
 int main()
 {	Graphe g;
-	unsigned char depart[50];
-	unsigned char arrivee[50];
+	//unsigned char depart[50];
+	//unsigned char arrivee[50];
+	unsigned int depart;
+	unsigned int arrivee;
 	
 	char* fichier="metro.csv";
 	
 	g=lit_graphe(fichier);
 	
-	case 1:
-		printf("entrez la station de depart\n");
-		scanf("%u\n",&depart);
-		printf("entrez la station d'arrivee\n");
-		scanf("%u\n",&arrivee);
+	
+	printf("entrez la station de depart\n");
+	scanf("%u\n",&depart);
+	printf("entrez la station d'arrivee\n");
+	scanf("%u\n",&arrivee);
 
-		ppc
+	ppc(g,depart,arrivee);
 
 		
 	
