@@ -17,7 +17,7 @@ int main()
 
   printf("Donner le umero de station d arrivée : \n");
   scanf("%u", &arrivee);
-  pcc(g,depart,arrivee);
+  graphe_pcc(g,depart,arrivee);
 
 
 }
