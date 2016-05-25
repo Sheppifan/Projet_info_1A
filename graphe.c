@@ -206,7 +206,6 @@ void graphe_ajoute_arc(Graphe g, unsigned int u, unsigned int v, double val)
 }
 
 // fonctions chemin:
-
 void bellman(Graphe g, unsigned int s)
 {
     unsigned int nonstab= 0, i;
@@ -215,21 +214,21 @@ void bellman(Graphe g, unsigned int s)
     sommet tableau=g->stations;
 
     for(i=0; i<graphe_lit_nX(g); i++)
-        {
+    {
         graphe_ecrit_poids(g, i, poids_inf);
-        }
-    graphe_ecrit_poids(g,u,0);
+    }
+    graphe_ecrit_poids(g,s,0);
 
-    while (!nonstab){
+    while (!nonstab) {
         nonstab = 1;
-        for(i=0; i<graphe_lit_nA(g); i++){
+        for(i=0; i<graphe_lit_nA(g); i++) {
             u= tableau[i].pere;
             v= tableau[i].arc->val.Xdest;
             if( graphe_lit_poids(g, u) + graphe_lit_poids_arc(g,u,v) < graphe_lit_poids(g, v))
-            {
-               graphe_ecrit_poids(g,v,graphe_lit_poids(g,u) + graphe_lit_poids_arc(g,u,v));
-               tableau[v].pere=u;
-               nonstab = 0;
+            {   
+                graphe_ecrit_poids(g,v,graphe_lit_poids(g,u) + graphe_lit_poids_arc(g,u,v));
+                tableau[v].pere=u;
+                nonstab = 0;
             }
         }
     }
@@ -252,15 +251,15 @@ void graphe_pcc(Graphe g, unsigned int u, unsigned int v)
     changements[0]=-10;
     itineraire[0] = v;
     bellman(g, u);
-    if ( graphe_lit_poids(g, v)== poids_inf){
+    if ( graphe_lit_poids(g, v)== poids_inf) {
         printf("Aucun itineraire trouve\n");
     }
-    else{
+    else {
         temps = graphe_lit_poids(g, v);
         while(position != u)
-        	{
-        		position = tableau[position].pere;
-            if (strcmp(tableau[position].nom_ligne, tableau[itineraire[nbstations]].nom_ligne)){
+        {
+            position = tableau[position].pere;
+            if (strcmp(tableau[position].nom_ligne, tableau[itineraire[nbstations]].nom_ligne)) {
                 printf("Changement entre %s et %s\n", tableau[itineraire[nbstations]].nom_ligne, tableau[position].nom_ligne);
                 changements[nbchangements] = nbstations;
                 nbchangements++;
@@ -273,9 +272,9 @@ void graphe_pcc(Graphe g, unsigned int u, unsigned int v)
         printf("Nombre de stations : %u\n", nbstations);
         printf("Nombre de changements : %u\n", nbchangements);
         printf("Itineraire : \n");
-        for(i=0;i<nbstations;i++)
+        for(i=0; i<nbstations; i++)
         {
-        	printf("Etape %u : %s %u\n",i, tableau[itineraire[i]].nom_ligne,tableau[itineraire[i]].num_station);
+            printf("Etape %u : %s %u\n",i, tableau[itineraire[i]].nom_ligne,tableau[itineraire[i]].num_station);
         }
 
     }
