@@ -125,9 +125,8 @@ double graphe_lit_poids_arc(Graphe g, unsigned int u, unsigned int v)
     if(g==NULL) {printf("graphe vide\n"); exit(1);}
     p=(g->stations)+u;
     l=(p->arc);
-    for(i=0;i<=v;i++)
+    while(l->suiv!=NULL && l->val.Xdest!=v)
     {
-		if(l->suiv==NULL) {exit(1);}
         l=l->suiv;
     }
     valeur=l->val.poids_arc;
