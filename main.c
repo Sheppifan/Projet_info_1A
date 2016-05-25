@@ -35,26 +35,29 @@ int main()
 	unsigned int depart;
 	unsigned int arrivee;
 	unsigned int condition;
+	unsigned int continuer=1;
 	
 	char* fichier="metro.csv";
-	
 	g=lit_graphe(fichier);
-	cond :
-	printf("1 : nouveau trajet\n");
-	printf("0 : quitter\n");
-	switch(condition)
-	{	case 1 :
 	
-			printf("entrez la station de depart\n");
-			scanf("%u\n",&depart);
-			printf("entrez la station d'arrivee\n");
-			scanf("%u\n",&arrivee);
-			pcc(g,depart,arrivee);
-			goto cond;
-			break;
+	while(continuer==1){
+		printf("1 : nouveau trajet\n");
+		printf("0 : quitter\n");
+		scanf("u\n",&condition);
+		switch(condition)
+		{	case 1 :
+				printf("entrez la station de depart\n");
+				scanf("%u\n",&depart);
+				printf("entrez la station d'arrivee\n");
+				scanf("%u\n",&arrivee);
+				pcc(g,depart,arrivee);
+				continuer=1;
+				break;
 			
-		case 2 :
-			return 1;
-			break;
+			case 0 :
+				continuer=0;
+				break;
+		}
 	}
+	return(1);
 }
