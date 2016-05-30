@@ -2,7 +2,7 @@
 #include "graphe.h"
 #include <stdlib.h>
 #include <stdlib.h>
-#include <string.h>
+
 
 
 int main()
@@ -18,6 +18,6 @@ int main()
   printf("Donner le umero de station d arrivée : \n");
   scanf("%u", &arrivee);
   graphe_pcc(g,depart,arrivee);
-
+return 0;
 
 }
