@@ -2,7 +2,6 @@
 #include "liste.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 
 /// Fonctions de laure
@@ -82,8 +81,8 @@ double graphe_lit_poids(Graphe g, unsigned int u)       //lit le poids du noeud 
 {
     sommet p=(g->stations);
     double poids_noeud;
-    if(g==NULL) { printf("graphe vide\n"); exit(1);}	
-	if(u>g->nX) {printf("la valeur de u n'est pas comprise entre %d et%u\n", 0, g->nX); exit(1);}
+    if(g==NULL) { printf("graphe vide\n"); exit(1);}
+	if(u>g->nX) {printf("la valeur de u (%d) n'est pas comprise entre %d et %u\n", u, 0, g->nX); exit(1);}
 
     p=p+u;
     poids_noeud=p->poids_noeud;
@@ -92,7 +91,7 @@ double graphe_lit_poids(Graphe g, unsigned int u)       //lit le poids du noeud 
 
 void graphe_ecrit_poids(Graphe g, unsigned int u, double valeur) //ecrit dans le champ poids_noeud le poids du noeud u du graphe g
 {	sommet p=g->stations;
-	
+
     	if(g==NULL) {printf("graphe vide\n"); exit(1);}
 
     	(p+u)->poids_noeud=valeur;
@@ -104,7 +103,7 @@ void graphe_ecrit_poids_arc(Graphe g, unsigned int u, unsigned int v, double val
     sommet p=NULL;
     Liste l=creer_liste();
     if(g==NULL) {printf("graphe vide\n"); exit(1);}
-    if(u>g->nX) {printf("la valeur de u n'est pas comprise entre %d et %d\n",0, g->nX);exit(1);}
+    if(u>g->nX) {printf("la valeur de u (%d) n'est pas comprise entre %d et %d\n", u, 0, g->nX);exit(1);}
 
 	p=(g->stations)+u;
     l=(p->arc);
@@ -143,6 +142,7 @@ Graphe lit_graphe(char* fichier)
 	unsigned int nbstation;
 	double latitude,longitude;
 	char mot[512];
+	char *pos;
 	unsigned char nmstation[50];
 	unsigned char nomligne[50];  //revoir appelation pour la fonction fscanf et fseek
 	int nbr_noeud=0;
@@ -163,6 +163,8 @@ Graphe lit_graphe(char* fichier)
 		{	fgets(nmstation,511,fstation);
 			//printf("nbstation=%d, lat=%lf, long=%lf, nomligne=%s,nmstation=%s\n",nbstation,latitude,longitude,nomligne,nmstation);
 		        strcpy(p->nom_station,nmstation);//(p->nom_station)=nmstation;
+		        if ((pos=strchr(p->nom_station, '\n')) != NULL)
+                    *pos = '\0';
  		        strcpy(p->nom_ligne,nomligne);//(p->nom_ligne)=nomligne;
 			(p->num_station)=nbstation;
 			//printf("nbstation=%d,nomligne=%s,nmstation=%s\n",(p->num_station),p->nom_ligne,p->nom_station);
@@ -190,7 +192,7 @@ void graphe_ajoute_arc(Graphe g, unsigned int u, unsigned int v, double val)
 {	sommet p=g->stations;
 	ELEMENT e;
 	unsigned int nbrX;
-   
+
 	e.Xdest=v;
 	e.poids_arc=val;
 
@@ -211,24 +213,29 @@ void bellman(Graphe g, unsigned int s)
     unsigned int u,v;
     double poids_inf = 10000;
     sommet tableau=g->stations;
+    Liste maListe;
 
     for(i=0; i<graphe_lit_nX(g); i++)
     {
         graphe_ecrit_poids(g, i, poids_inf);
     }
     graphe_ecrit_poids(g,s,0);
-     printf("erreur");
     while (!nonstab) {
         nonstab = 1;
-        for(i=0; i<graphe_lit_nA(g); i++) {
-            u= tableau[i].num_station;
-            v= tableau[i].arc->val.Xdest;
-            if( graphe_lit_poids(g, u) + graphe_lit_poids_arc(g,u,v) < graphe_lit_poids(g, v))
-            {   
-                graphe_ecrit_poids(g,v,graphe_lit_poids(g,u) + graphe_lit_poids_arc(g,u,v));
-                tableau[v].pere=u;
-                nonstab = 0;
+        for(i=0; i<graphe_lit_nX(g); i++) {
+            maListe = tableau[i].arc;
+            while (!est_vide(maListe)){
+                u= tableau[i].num_station;
+                v= maListe->val.Xdest;
+                if( graphe_lit_poids(g, u) + graphe_lit_poids_arc(g,u,v) < graphe_lit_poids(g, v))
+                {
+                    graphe_ecrit_poids(g,v,graphe_lit_poids(g,u) + graphe_lit_poids_arc(g,u,v));
+                    tableau[v].pere=u;
+                    nonstab = 0;
+                }
+                maListe=maListe->suiv;
             }
+
         }
     }
 }
@@ -249,7 +256,7 @@ void graphe_pcc(Graphe g, unsigned int u, unsigned int v)
     sommet tableau=g->stations;
     changements[0]=-10;
     itineraire[0] = v;
-    affiche_graphe(g);
+    //affiche_graphe(g);
     bellman(g, u);
     if ( graphe_lit_poids(g, v)== poids_inf) {
         printf("Aucun itineraire trouve\n");
@@ -260,21 +267,21 @@ void graphe_pcc(Graphe g, unsigned int u, unsigned int v)
         {
             position = tableau[position].pere;
             if (strcmp(tableau[position].nom_ligne, tableau[itineraire[nbstations]].nom_ligne)) {
-                printf("Changement entre %s et %s\n", tableau[itineraire[nbstations]].nom_ligne, tableau[position].nom_ligne);
+                //printf("Changement entre %s et %s\n", tableau[itineraire[nbstations]].nom_ligne, tableau[position].nom_ligne);
                 changements[nbchangements] = nbstations;
                 nbchangements++;
             }
             nbstations++;
             itineraire[nbstations] = position;
         }
-        printf("Trajet entre les stations %s et %s :\n\n", tableau[u].nom_ligne, tableau[v].nom_ligne);
+        printf("Trajet entre les stations %s et %s :\n\n", tableau[u].nom_station, tableau[v].nom_station);
         printf("Durée du trajet : %lf\n ", temps);
         printf("Nombre de stations : %u\n", nbstations);
-        printf("Nombre de changements : %u\n", nbchangements);
-        printf("Itineraire : \n");
+        printf("Nombre de changements : %u\n\n", nbchangements);
+        printf("Itineraire : (%d etape(s)) \n", nbstations);
         for(i=0; i<nbstations; i++)
         {
-            printf("Etape %u : %s %u\n",i, tableau[itineraire[i]].nom_ligne,tableau[itineraire[i]].num_station);
+            printf("Etape %u : ligne %s, station %u (%s)\n",i+1, tableau[itineraire[i]].nom_ligne, tableau[itineraire[i]].num_station, tableau[itineraire[i]].nom_station);
         }
 
     }
