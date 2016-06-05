@@ -7,15 +7,15 @@
 /// Fonctions de laure
 Graphe nouveau_graphe(unsigned int nX,unsigned int nA)
 {
-	Graphe g=calloc(1,sizeof(Graphe));
-	sommet tableau=calloc(nX,sizeof(*tableau));
+	Graphe g=calloc(1,sizeof(Graphe)); //Allocation de mémoire pour le graphe
+	sommet tableau=calloc(nX,sizeof(*tableau)); //Alloctation de mémoire pout le tableau de sommets 
 	unsigned int i=0;
     g->stations=tableau;
-	g->nX=nX;
+	g->nX=nX;   // On rentre les valeurs nA et nX dans le tableau
 	g->nA=nA;
-	for(i=0;i<nX;i++ )
+	for(i=0;i<nX;i++ )// on parcourt les sommets du tableau
     {
-        (tableau+i)->arc=creer_liste();
+        (tableau+i)->arc=creer_liste(); // On alloue de la mémoire aux listes partant des sommets du tableau
     }
 	return g;
 }
@@ -23,9 +23,9 @@ Graphe nouveau_graphe(unsigned int nX,unsigned int nA)
 void affiche_graphe(Graphe g)
 {	unsigned int i;
 	sommet tableau=g->stations;
-	for (i=0; i<g->nX; i++)
+	for (i=0; i<g->nX; i++)  // On parcourt les sommets du tableau 
 	{
-        printf("Nom de station : %s\n", tableau[i].nom_station);
+        printf("Nom de station : %s\n", tableau[i].nom_station); // on affiche les informations contenues dans chaque sommet
         printf("Nom de ligne : %s\n", tableau[i].nom_ligne);
         printf("Numero de station : %u\n", tableau[i].num_station);
         printf("Poids noeud : %lf\n", tableau[i].poids_noeud);
@@ -42,10 +42,10 @@ void detruit_graphe(Graphe g)
 	sommet tableau=g->stations;
 	for (i=0; i<g->nX; i++)
 	{
-  	free(tableau[i].arc);
+  	free(tableau[i].arc); // On libere les listes partant de chaque sommets
 	}
-	free(g->stations);
-	free(g);
+	free(g->stations); // On libere le tableau de sommet
+	free(g); // On libere le graphe
 
 }
 
@@ -217,14 +217,14 @@ void bellman(Graphe g, unsigned int s)
 
     for(i=0; i<graphe_lit_nX(g); i++)
     {
-        graphe_ecrit_poids(g, i, poids_inf);
+        graphe_ecrit_poids(g, i, poids_inf); // Initialisation des poids des sommets à 10000 (infini)
     }
-    graphe_ecrit_poids(g,s,0);
+    graphe_ecrit_poids(g,s,0); // Initialisation du poids du sommet de départ à 0
     while (!nonstab) {
         nonstab = 1;
-        for(i=0; i<graphe_lit_nX(g); i++) {
+        for(i=0; i<graphe_lit_nX(g); i++) { // On parcourt tous les sommets
             maListe = tableau[i].arc;
-            while (!est_vide(maListe)){
+            while (!est_vide(maListe)){ <:: // On parcourt tous les arcs d'un sommet
                 u= tableau[i].num_station;
                 v= maListe->val.Xdest;
                 if( graphe_lit_poids(g, u) + graphe_lit_poids_arc(g,u,v) < graphe_lit_poids(g, v))
