@@ -225,12 +225,12 @@ void bellman(Graphe g, unsigned int s)
         for(i=0; i<graphe_lit_nX(g); i++) { // On parcourt tous les sommets
             maListe = tableau[i].arc;
             while (!est_vide(maListe)){ <:: // On parcourt tous les arcs d'un sommet
-                u= tableau[i].num_station;
+                u= tableau[i].num_station; // On ecrit les numéros de station de départ et arrivée de l'arc dans u et v 
                 v= maListe->val.Xdest;
-                if( graphe_lit_poids(g, u) + graphe_lit_poids_arc(g,u,v) < graphe_lit_poids(g, v))
+                if( graphe_lit_poids(g, u) + graphe_lit_poids_arc(g,u,v) < graphe_lit_poids(g, v)) // Test poids
                 {
-                    graphe_ecrit_poids(g,v,graphe_lit_poids(g,u) + graphe_lit_poids_arc(g,u,v));
-                    tableau[v].pere=u;
+                    graphe_ecrit_poids(g,v,graphe_lit_poids(g,u) + graphe_lit_poids_arc(g,u,v));// Si le test est positif on change le poids de v
+                    tableau[v].pere=u; // u devient le père de v 
                     nonstab = 0;
                 }
                 maListe=maListe->suiv;
@@ -249,30 +249,30 @@ void graphe_pcc(Graphe g, unsigned int u, unsigned int v)
     unsigned int nbstations=0;
     unsigned int nbchangements=0;
     unsigned int i;
-    unsigned int itineraire[100];
-    unsigned int changements[100];
+    unsigned int itineraire[100]; // Tableau contenant les sommets par lesquels on passe
+    unsigned int changements[100]; 
     double temps;
     double poids_inf = 10000;
     sommet tableau=g->stations;
     changements[0]=-10;
     itineraire[0] = v;
     //affiche_graphe(g);
-    bellman(g, u);
+    bellman(g, u); // On mets les poids des sommets a jour
     if ( graphe_lit_poids(g, v)== poids_inf) {
         printf("Aucun itineraire trouve\n");
     }
     else {
-        temps = graphe_lit_poids(g, v);
-        while(position != u)
+        temps = graphe_lit_poids(g, v); // Le temps correspond au poids du sommet d'arrivée
+        while(position != u) // Tant que l'on est pas remonté au sommet de départ
         {
-            position = tableau[position].pere;
+            position = tableau[position].pere; // On remonte les pères
             if (strcmp(tableau[position].nom_ligne, tableau[itineraire[nbstations]].nom_ligne)) {
                 //printf("Changement entre %s et %s\n", tableau[itineraire[nbstations]].nom_ligne, tableau[position].nom_ligne);
                 changements[nbchangements] = nbstations;
                 nbchangements++;
             }
             nbstations++;
-            itineraire[nbstations] = position;
+            itineraire[nbstations] = position; // On rentre la position à laquelle on se trouve dans le tableau d'itinéraire
         }
         printf("Trajet entre les stations %s et %s :\n\n", tableau[u].nom_station, tableau[v].nom_station);
         printf("Durée du trajet : %lf\n ", temps);
